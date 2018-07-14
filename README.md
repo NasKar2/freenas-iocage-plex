@@ -2,7 +2,7 @@
 
 Script to create an iocage jail on Freenas 11.1U4 from scratch with plex.
 
-All apps will be placed in a jail with separate data directory to allow for easy reinstallation/backup.
+Plex will be placed in a jail with separate data directory (/mnt/v1/apps/...) to allow for easy reinstallation/backup.
 
 Plex will be installed with the default user/group (plex/plex) and the media group will include plex to allow reading of the media files.
 
