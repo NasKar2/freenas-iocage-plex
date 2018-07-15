@@ -97,8 +97,8 @@ iocage restart ${JAIL_NAME}
 #
 # Make media the user of the jail and create group media and make media a user of the that group
 iocage exec ${JAIL_NAME} "pw user add media -c media -u 8675309  -d /nonexistent -s /usr/bin/nologin"
-iocage exec ${JAIL_NAME} "pw groupadd -n media -g 8675309"
-iocage exec ${JAIL_NAME} "pw groupmod media -m plex"
+#iocage exec ${JAIL_NAME} "pw groupadd -n media -g 8675309"
+#iocage exec ${JAIL_NAME} "pw groupmod media -m plex"
 
 #
 # Make pkg upgrade get the latest repo
@@ -120,6 +120,7 @@ if [ $PLEX_TYPE == "plexpass" ]; then
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_user="plex"
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_group="plex"
    iocage exec ${JAIL_NAME} chown -R plex:plex /config/${PLEX_DATA}
+   iocage exec ${JAIL_NAME} "pw groupmod media -m plex"
    iocage exec ${JAIL_NAME} service plexmediaserver_plexpass start
 else
    echo "plex to be installed"
@@ -129,6 +130,7 @@ else
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_user="plex"
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_group="plex"
    iocage exec ${JAIL_NAME} chown -R plex:plex /config/${PLEX_DATA}   
+   iocage exec ${JAIL_NAME} "pw groupmod media -m plex"
    iocage exec ${JAIL_NAME} service plexmediaserver start
 fi
 
