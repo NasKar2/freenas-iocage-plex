@@ -111,7 +111,7 @@ iocage exec ${JAIL_NAME} pkg upgrade -y
 iocage restart ${JAIL_NAME}
 
 # Install Plex
-iocage exec ${JAIL_NAME} chown -R plex:plex /config/${PLEX_DATA}
+
 if [ $PLEX_TYPE == "plexpass" ]; then
    echo "plexpass to be installed"
    iocage exec ${JAIL_NAME} pkg install -y plexmediaserver-plexpass
@@ -119,6 +119,7 @@ if [ $PLEX_TYPE == "plexpass" ]; then
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_support_path="/config/${PLEX_DATA}"
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_user="plex"
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_group="plex"
+   iocage exec ${JAIL_NAME} chown -R plex:plex /config/${PLEX_DATA}
    iocage exec ${JAIL_NAME} service plexmediaserver_plexpass start
 else
    echo "plex to be installed"
@@ -127,6 +128,7 @@ else
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_support_path="/config/${PLEX_DATA}"
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_user="plex"
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_group="plex"
+   iocage exec ${JAIL_NAME} chown -R plex:plex /config/${PLEX_DATA}   
    iocage exec ${JAIL_NAME} service plexmediaserver start
 fi
 
