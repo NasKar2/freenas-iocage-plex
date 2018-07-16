@@ -89,10 +89,10 @@ plex_config=${POOL_PATH}/apps/${PLEX_DATA}
 iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
-iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/apps/ /config nullfs rw 0 0
+iocage fstab -a ${JAIL_NAME} ${plex_config} /config nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${MEDIA_LOCATION} /mnt/media nullfs rw 0 0
 
-iocage restart ${JAIL_NAME} 
+iocage restart ${JAIL_NAME}
 
 #
 # Make media the user of the jail and create group media and make media a user of the that group
@@ -116,20 +116,24 @@ if [ $PLEX_TYPE == "plexpass" ]; then
    echo "plexpass to be installed"
    iocage exec ${JAIL_NAME} pkg install -y plexmediaserver-plexpass
    iocage exec ${JAIL_NAME} sysrc "plexmediaserver_plexpass_enable=YES"
-   iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_support_path="/config/${PLEX_DATA}"
-   iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_user="plex"
-   iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_group="plex"
-   iocage exec ${JAIL_NAME} chown -R plex:plex /config/${PLEX_DATA}
+   iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_support_path="/config"
+#   iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_user="plex"
+#   iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_group="plex"
+#   iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_pidfile="/config/plex.pid"
+   iocage exec ${JAIL_NAME} chown -R plex:plex /config
+   iocage exec ${JAIL_NAME} chmod -R 760 /config
    iocage exec ${JAIL_NAME} "pw groupmod media -m plex"
    iocage exec ${JAIL_NAME} service plexmediaserver_plexpass start
 else
    echo "plex to be installed"
    iocage exec ${JAIL_NAME} pkg install -y plexmediaserver
    iocage exec ${JAIL_NAME} sysrc "plexmediaserver_enable=YES"
-   iocage exec ${JAIL_NAME} sysrc plexmediaserver_support_path="/config/${PLEX_DATA}"
-   iocage exec ${JAIL_NAME} sysrc plexmediaserver_user="plex"
-   iocage exec ${JAIL_NAME} sysrc plexmediaserver_group="plex"
-   iocage exec ${JAIL_NAME} chown -R plex:plex /config/${PLEX_DATA}   
+   iocage exec ${JAIL_NAME} sysrc plexmediaserver_support_path="/config"
+ #  iocage exec ${JAIL_NAME} sysrc plexmediaserver_user="plex"
+ #  iocage exec ${JAIL_NAME} sysrc plexmediaserver_group="plex"
+ #  iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_pidfile="/config/plex.pid"
+   iocage exec ${JAIL_NAME} chown -R plex:plex /config
+   iocage exec ${JAIL_NAME} chmod -R 760 /config
    iocage exec ${JAIL_NAME} "pw groupmod media -m plex"
    iocage exec ${JAIL_NAME} service plexmediaserver start
 fi
@@ -142,4 +146,3 @@ iocage fstab -r ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 
 echo
 echo "${PLEX_TYPE} should be available at http://${JAIL_IP}:32400/web/index.html"
-
