@@ -14,7 +14,8 @@ DEFAULT_GW_IP=""
 INTERFACE=""
 VNET="off"
 POOL_PATH=""
-JAIL_NAME="mono"
+APPS_PATH=""
+JAIL_NAME="plexpass"
 PLEX_DATA=""
 MEDIA_LOCATION=""
 TORRENTS_LOCATION=""
@@ -83,9 +84,9 @@ iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r 11.1-RELEASE ip4_addr="$
 
 rm /tmp/pkg.json
 
-mkdir -p ${POOL_PATH}/apps/${PLEX_DATA}
+mkdir -p ${POOL_PATH}/${APPS_PATH}/${PLEX_DATA}
 #mkdir -p ${POOL_PATH}/${MEDIA_LOCATION}
-plex_config=${POOL_PATH}/apps/${PLEX_DATA}
+plex_config=${POOL_PATH}/${APPS_PATH}/${PLEX_DATA}
 iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0

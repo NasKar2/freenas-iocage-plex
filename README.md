@@ -15,6 +15,8 @@ Edit file plex-config
 
 Edit plex-config file with your network information and directory data name you want to use and location of your media files and torrents.
 
+APPS_PATH="apps" will install the data for plex in POOL_PATH/APPS_PATH in this setup /mnt/v1/apps/
+
 PLEX_DATA="plexpass" will create a data directory /mnt/v1/apps/plexpass to store all the data for that app.
 
 MEDIA_LOCATION will set the location of your media files, in this example /mnt/v1/media
@@ -30,6 +32,7 @@ DEFAULT_GW_IP="192.168.5.1"
 INTERFACE="igb0"
 VNET="off"
 POOL_PATH="/mnt/v1"
+APPS_PATH="apps"
 JAIL_NAME="plexapps"
 PLEX_DATA="plexdata2"
 MEDIA_LOCATION="media"
