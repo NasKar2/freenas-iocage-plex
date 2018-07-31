@@ -50,6 +50,11 @@ if [ -z $POOL_PATH ]; then
   exit 1
 fi
 
+if [ -z $APPS_PATH ]; then
+  echo 'Configuration error: APPS_PATH must be set'
+  exit 1
+fi
+
 if [ -z $JAIL_NAME ]; then
   echo 'Configuration error: JAIL_NAME must be set'
   exit 1
