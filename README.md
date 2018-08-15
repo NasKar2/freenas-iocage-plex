@@ -51,7 +51,7 @@ Then run this command
 
 Server/Network/Secure connections is set to Preferred by default
 
-Server/Transcoder/Transcoder temporary directory /config
+Server/Transcoder/Transcoder temporary directory set to /config
 
 Make sure to add to Server/Network/List of IP addresses and networks that are allowed without auth to your subnet for example 192.168.5.0/24 to allow metadata to be downloaded.
 
