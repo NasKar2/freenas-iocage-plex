@@ -25,6 +25,7 @@ SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 . $SCRIPTPATH/plex-config
 CONFIGS_PATH=$SCRIPTPATH/configs
+RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g")
 
 # Check for plex-config and set configuration
 if ! [ -e $SCRIPTPATH/plex-config ]; then
@@ -85,12 +86,12 @@ fi
 #
 # Create Jail
 echo '{"pkgs":["nano","ca_root_nss"]}' > /tmp/pkg.json
-iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r 11.1-RELEASE ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
+iocage create --name "${JAIL_NAME}" -p /tmp/pkg.json -r ${RELEASE} ip4_addr="${INTERFACE}|${JAIL_IP}/24" defaultrouter="${DEFAULT_GW_IP}" boot="on" host_hostname="${JAIL_NAME}" vnet="${VNET}"
 
 rm /tmp/pkg.json
-
+echo ${POOL_PATH}/${APPS_PATH}/${PLEX_DATA}
 mkdir -p ${POOL_PATH}/${APPS_PATH}/${PLEX_DATA}
-#mkdir -p ${POOL_PATH}/${MEDIA_LOCATION}
+mkdir -p ${POOL_PATH}/${MEDIA_LOCATION}
 plex_config=${POOL_PATH}/${APPS_PATH}/${PLEX_DATA}
 iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 
