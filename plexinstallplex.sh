@@ -146,9 +146,9 @@ else
    iocage exec ${JAIL_NAME} service plexmediaserver start
 fi
 
+#
 # Change plex user to media
-
-echo "${PLEX_TYPE} installed"
+#
 iocage exec ${JAIL_NAME} "pw groupmod media -m plex"
 iocage exec ${JAIL_NAME} "pw groupmod plex -m media"
 iocage exec ${JAIL_NAME} sed -i '' "s/plexmediaserver_plexpass_user=\"plex\"/plexmediaserver_plexpass_user=\"media\"/" /git/freenas-iocage-plex/configs/plexmediaserver_plexpass
@@ -158,5 +158,6 @@ iocage exec ${JAIL_NAME} sed -i '' "s/plexmediaserver_plexpass_group=\"plex\"/pl
 # remove /mnt/configs as no longer needed
 iocage fstab -r ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 
+echo "${PLEX_TYPE} installed"
 echo
 echo "${PLEX_TYPE} should be available at http://${JAIL_IP}:32400/web/index.html"
