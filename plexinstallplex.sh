@@ -95,10 +95,9 @@ mkdir -p ${POOL_PATH}/${MEDIA_LOCATION}
 plex_config=${POOL_PATH}/${APPS_PATH}/${PLEX_DATA}
 iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 
-# Fix error with fstab may delete in future
-iocage exec plexpass2 mkdir -p /mnt/media
-iocage exec plexpass2 mkdir -p /mnt/configs
-iocage exec plexpass2 mkdir -p /config
+iocage exec ${JAIL_NAME} mkdir -p /mnt/media
+iocage exec ${JAIL_NAME} mkdir -p /mnt/configs
+iocage exec ${JAIL_NAME} mkdir -p /config
 
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${plex_config} /config nullfs rw 0 0
