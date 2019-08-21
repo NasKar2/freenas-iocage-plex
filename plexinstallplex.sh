@@ -99,9 +99,18 @@ mkdir -p ${POOL_PATH}/${MEDIA_LOCATION}
 plex_config=${POOL_PATH}/${APPS_PATH}/${PLEX_DATA}
 iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 
+# Fix for FreeNAS-11.2-U5
+fn_version=`cat /etc/version | cut -d' ' -f1`
+
+echo "FreeNAS Version is $fn_version"
+if [ $fn_version == "FreeNAS-11.2-U5" ]; then
+echo "This is FreeNAS-11.2-U5"
 iocage exec ${JAIL_NAME} mkdir -p /mnt/media
 iocage exec ${JAIL_NAME} mkdir -p /mnt/configs
 iocage exec ${JAIL_NAME} mkdir -p /config
+else
+echo "FreeNAS not 11.2-U5"
+fi
 
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${plex_config} /config nullfs rw 0 0
