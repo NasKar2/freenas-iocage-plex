@@ -19,7 +19,7 @@ JAIL_NAME="plexpass"
 PLEX_DATA=""
 MEDIA_LOCATION=""
 TORRENTS_LOCATION=""
-PLEX_TYPE="plexpass"
+PLEX_TYPE="plex"
 
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
@@ -111,10 +111,8 @@ iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${MEDIA_LOCATION} /mnt/media nullfs rw
 iocage restart ${JAIL_NAME}
 
 #
-# Make media the user of the jail and create group media and make media a user of the that group
+# Add user media to jail
 iocage exec ${JAIL_NAME} "pw user add media -c media -u 8675309  -d /nonexistent -s /usr/bin/nologin"
-#iocage exec ${JAIL_NAME} "pw groupadd -n media -g 8675309"
-#iocage exec ${JAIL_NAME} "pw groupmod media -m plex"
 
 #
 # Make pkg upgrade get the latest repo
@@ -126,8 +124,8 @@ iocage exec ${JAIL_NAME} cp -f /mnt/configs/FreeBSD.conf /usr/local/etc/pkg/repo
 iocage exec ${JAIL_NAME} pkg upgrade -y
 iocage restart ${JAIL_NAME}
 
+#
 # Install Plex
-
 if [ $PLEX_TYPE == "plexpass" ]; then
    echo "plexpass to be installed"
    iocage exec ${JAIL_NAME} pkg install -y plexmediaserver-plexpass
@@ -151,13 +149,8 @@ else
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_enable="YES"
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_support_path="/config"
 #  iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_pidfile="/config/plex.pid"
-#echo "before chown plex"
-#   iocage exec ${JAIL_NAME} chown -R plex:plex /config
-#   iocage exec ${JAIL_NAME} chmod -R 760 /config
-echo "before hang start plex"
    iocage exec ${JAIL_NAME} service plexmediaserver start
    iocage exec ${JAIL_NAME} service plexmediaserver stop
-echo "change to media user"
 # Change plex user to media
    iocage exec ${JAIL_NAME} "pw groupmod media -m plex"
    iocage exec ${JAIL_NAME} "pw groupmod plex -m media"
