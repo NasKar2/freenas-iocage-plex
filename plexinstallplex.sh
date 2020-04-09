@@ -160,13 +160,16 @@ else
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_user="media"
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_group="media"
    iocage exec ${JAIL_NAME} service plexmediaserver start
+   sed -i '' "s/_plexpass//" "${CONFIGS_PATH}"/update_packages
 fi
 
 
 #
-# remove /mnt/configs as no longer needed
+# update packages & remove /mnt/configs as no longer needed
+iocage exec "${JAIL_NAME}" crontab /mnt/configs/update_packages
 iocage fstab -r ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
-
+iocage exec "${JAIL_NAME}" rm -rf /mnt/configs
+iocage restart "${JAIL_NAME}"
 echo "${PLEX_TYPE} installed"
 echo
 echo "${PLEX_TYPE} should be available at http://${JAIL_IP}:32400/web/index.html"
