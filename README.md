@@ -23,7 +23,7 @@ MEDIA_LOCATION will set the location of your media files, in this example /mnt/v
 
 TORRENTS_LOCATION will set the location of your torrent files, in this example /mnt/v1/torrents
 
-PLEX_TYPE needs to be set to plexpass or plex depending on which version you want.
+PLEX_TYPE needs to be set to plexpass or plex depending on which version you want. I recommend plex as the plexpass version is a beta.
 
 
 ```
@@ -37,7 +37,7 @@ JAIL_NAME="plexapps"
 PLEX_DATA="plexdata2"
 MEDIA_LOCATION="media"
 TORRENTS_LOCATION="torrents"
-PLEX_TYPE="plexpass"
+PLEX_TYPE="plex"
 ```
 ## Install Plex in fresh Jail
 

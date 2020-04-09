@@ -103,7 +103,7 @@ iocage exec ${JAIL_NAME} 'sysrc ifconfig_epair0_name="epair0b"'
 iocage exec ${JAIL_NAME} mkdir -p /mnt/media
 iocage exec ${JAIL_NAME} mkdir -p /mnt/configs
 iocage exec ${JAIL_NAME} mkdir -p /config
-
+chown -R 972:972 "${plex_config}"
 iocage fstab -a ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${plex_config} /config nullfs rw 0 0
 iocage fstab -a ${JAIL_NAME} ${POOL_PATH}/${MEDIA_LOCATION} /mnt/media nullfs rw 0 0
@@ -133,47 +133,42 @@ if [ $PLEX_TYPE == "plexpass" ]; then
    iocage exec ${JAIL_NAME} pkg install -y plexmediaserver-plexpass
    iocage exec ${JAIL_NAME} sysrc "plexmediaserver_plexpass_enable=YES"
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_support_path="/config"
-#   iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_user="plex"
-#   iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_group="plex"
 #   iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_pidfile="/config/plex.pid"
-   iocage exec ${JAIL_NAME} chown -R plex:plex /config
-   iocage exec ${JAIL_NAME} chmod -R 760 /config
    iocage exec ${JAIL_NAME} service plexmediaserver_plexpass start
    iocage exec ${JAIL_NAME} service plexmediaserver_plexpass stop
 # Change plex user to media
    iocage exec ${JAIL_NAME} "pw groupmod media -m plex"
    iocage exec ${JAIL_NAME} "pw groupmod plex -m media"
-   iocage exec ${JAIL_NAME} sed -i '' "s/plexmediaserver_plexpass_user=\"plex\"/plexmediaserver_plexpass_user=\"media\"/" /usr/local/etc/rc.d/plexmediaserver_plexpass
-   iocage exec ${JAIL_NAME} sed -i '' "s/plexmediaserver_plexpass_group=\"plex\"/plexmediaserver_plexpass_group=\"media\"/" /usr/local/etc/rc.d//plexmediaserver_plexpass
+#   iocage exec ${JAIL_NAME} sed -i '' "s/plexmediaserver_plexpass_user=\"plex\"/plexmediaserver_plexpass_user=\"media\"/" /usr/local/etc/rc.d/plexmediaserver_plexpass
+#   iocage exec ${JAIL_NAME} sed -i '' "s/plexmediaserver_plexpass_group=\"plex\"/plexmediaserver_plexpass_group=\"media\"/" /usr/local/etc/rc.d//plexmediaserver_plexpass
    iocage exec ${JAIL_NAME} chown -R media:media /config
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_user="media"
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_group="media"
-
    iocage exec ${JAIL_NAME} service plexmediaserver_plexpass start
 else
    echo "plex to be installed"
    iocage exec ${JAIL_NAME} pkg install -y plexmediaserver
-   iocage exec ${JAIL_NAME} sysrc "plexmediaserver_enable=YES"
+   iocage exec ${JAIL_NAME} sysrc plexmediaserver_enable="YES"
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_support_path="/config"
- #  iocage exec ${JAIL_NAME} sysrc plexmediaserver_user="plex"
- #  iocage exec ${JAIL_NAME} sysrc plexmediaserver_group="plex"
- #  iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_pidfile="/config/plex.pid"
-   iocage exec ${JAIL_NAME} chown -R plex:plex /config
-   iocage exec ${JAIL_NAME} chmod -R 760 /config
+#  iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_pidfile="/config/plex.pid"
+#echo "before chown plex"
+#   iocage exec ${JAIL_NAME} chown -R plex:plex /config
+#   iocage exec ${JAIL_NAME} chmod -R 760 /config
+echo "before hang start plex"
    iocage exec ${JAIL_NAME} service plexmediaserver start
    iocage exec ${JAIL_NAME} service plexmediaserver stop
+echo "change to media user"
 # Change plex user to media
    iocage exec ${JAIL_NAME} "pw groupmod media -m plex"
    iocage exec ${JAIL_NAME} "pw groupmod plex -m media"
-   iocage exec ${JAIL_NAME} sed -i '' "s/plexmediaserver_user=\"plex\"/plexmediaserver_user=\"media\"/" /usr/local/etc/rc.d/plexmediaserver
-   iocage exec ${JAIL_NAME} sed -i '' "s/plexmediaserver_group=\"plex\"/plexmediaserver_group=\"media\"/" /usr/local/etc/rc.d//plexmediaserver
+#   iocage exec ${JAIL_NAME} sed -i '' "s/plexmediaserver_user=\"plex\"/plexmediaserver_user=\"media\"/" /usr/local/etc/rc.d/plexmediaserver
+#   iocage exec ${JAIL_NAME} sed -i '' "s/plexmediaserver_group=\"plex\"/plexmediaserver_group=\"media\"/" /usr/local/etc/rc.d//plexmediaserver
    iocage exec ${JAIL_NAME} chown -R media:media /config
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_user="media"
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_group="media"
-
-
    iocage exec ${JAIL_NAME} service plexmediaserver start
 fi
+
 
 #
 # remove /mnt/configs as no longer needed
