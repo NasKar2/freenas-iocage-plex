@@ -1,6 +1,6 @@
 # plex-freenas-iocage
 
-Script to create an iocage jail on Freenas 11.1U4/11.2 from scratch with plex.
+Script to create an iocage jail on Freenas 11.1U4/11.2/11.3 from scratch with plex.
 
 Plex will be placed in a jail with separate data directory (/mnt/v1/apps/...) to allow for easy reinstallation/backup.
 
@@ -23,21 +23,21 @@ MEDIA_LOCATION will set the location of your media files, in this example /mnt/v
 
 TORRENTS_LOCATION will set the location of your torrent files, in this example /mnt/v1/torrents
 
-PLEX_TYPE needs to be set to plexpass or plex depending on which version you want. I recommend plex as the plexpass version is a beta.
+USE_BETA needs to be set to 0 for stable plex branch or 1 or beta version of plex (plexpass) depending on which version you want. I recommend plex (USE_BETA=0) as the plexpass version is a beta.
 
 
 ```
-JAIL_IP="192.168.5.57"
+JAIL_IP="192.168.5.68"
 DEFAULT_GW_IP="192.168.5.1"
 INTERFACE="igb0"
 VNET="off"
 POOL_PATH="/mnt/v1"
 APPS_PATH="apps"
-JAIL_NAME="plexapps"
-PLEX_DATA="plexdata2"
+JAIL_NAME="plex"
+PLEX_DATA="plexdata"
 MEDIA_LOCATION="media"
 TORRENTS_LOCATION="torrents"
-PLEX_TYPE="plex"
+USE_BETA=0
 ```
 ## Install Plex in fresh Jail
 
