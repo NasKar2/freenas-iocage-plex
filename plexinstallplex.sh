@@ -169,9 +169,6 @@ else
    iocage exec ${JAIL_NAME} service plexmediaserver start
    iocage exec "${JAIL_NAME}" cp -f /mnt/configs/update_packages /tmp/update_packages
    iocage exec "${JAIL_NAME}" sed -i '' "s/_plexpass//" /tmp/update_packages
-
-
-   sed -i '' "s/_plexpass//" "${CONFIGS_PATH}"/update_packages
 fi
 
 #
