@@ -68,9 +68,8 @@ fi
 #  exit 1
 #fi
 
-if [ "$PLEX_TYPE" != "plex" ] && [ "$PLEX_TYPE" != "plexpass" ]; then
-  echo '${PLEX_TYPE} Configuration error: PLEX_DATA must be set to plex or plexpass'
-  echo ${PLEX_TYPE}
+if [ "$USE_BETA" != 0 ] && [ "$USE_BETA" != 1 ]; then
+  echo 'Configuration error: USE_BETA must be set to 0 for plex or 1 for plexpass'
   exit 1
 fi
 
@@ -181,6 +180,6 @@ iocage exec "${JAIL_NAME}" crontab /tmp/update_packages
 iocage fstab -r "${JAIL_NAME}" "${CONFIGS_PATH}" /mnt/configs nullfs rw 0 0
 iocage exec "${JAIL_NAME}" rm -rf /mnt/configs /tmp/update_packages
 iocage restart "${JAIL_NAME}"
-echo "${PLEX_TYPE} installed"
+echo "${PLEXPKG} installed"
 echo
-echo "${PLEX_TYPE} should be available at http://${JAIL_IP}:32400/web/index.html"
+echo "${PLEXPKG} should be available at http://${JAIL_IP}:32400/web/index.html"
