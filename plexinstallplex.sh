@@ -9,24 +9,24 @@ if ! [ $(id -u) = 0 ]; then
 fi
 
 # Initialize defaults
+
 JAIL_IP=""
 DEFAULT_GW_IP=""
-INTERFACE=""
-VNET="off"
+INTERFACE="vnet0"
+VNET="on"
 POOL_PATH=""
 APPS_PATH=""
-JAIL_NAME="plexpass"
+JAIL_NAME=""
 PLEX_DATA=""
 MEDIA_LOCATION=""
 TORRENTS_LOCATION=""
-PLEX_TYPE="plex"
+USE_BETA=0
 
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 . $SCRIPTPATH/plex-config
 CONFIGS_PATH=$SCRIPTPATH/configs
-RELEASE="11.3-RELEASE"
-#RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g")
+RELEASE=$(freebsd-version | sed "s/STABLE/RELEASE/g" | sed "s/-p[0-9]*//")
 
 # Check for plex-config and set configuration
 if ! [ -e $SCRIPTPATH/plex-config ]; then
@@ -82,6 +82,14 @@ fi
 if [ -z $TORRENTS_LOCATION ]; then
   echo 'Configuration error: TORRENTS_LOCATION must be set'
   exit 1
+fi
+
+if [ $USE_BETA -eq 1 ]; then
+	echo "Using beta-release plexmediaserver code"
+	PLEXPKG="plexmediaserver_plexpass"
+else
+	echo "Using stable-release plexmediaserver code"
+	PLEXPKG="plexmediaserver"
 fi
 
 #
