@@ -139,7 +139,7 @@ if [ $PLEX_TYPE == "plexpass" ]; then
    iocage exec ${JAIL_NAME} "pw groupmod plex -m media"
 #   iocage exec ${JAIL_NAME} sed -i '' "s/plexmediaserver_plexpass_user=\"plex\"/plexmediaserver_plexpass_user=\"media\"/" /usr/local/etc/rc.d/plexmediaserver_plexpass
 #   iocage exec ${JAIL_NAME} sed -i '' "s/plexmediaserver_plexpass_group=\"plex\"/plexmediaserver_plexpass_group=\"media\"/" /usr/local/etc/rc.d//plexmediaserver_plexpass
-   iocage exec ${JAIL_NAME} chown -R media:media /config
+   iocage exec ${JAIL_NAME} chown -R media:media /config /var/run/plex
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_user="media"
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_plexpass_group="media"
    iocage exec ${JAIL_NAME} service plexmediaserver_plexpass start
@@ -156,19 +156,22 @@ else
    iocage exec ${JAIL_NAME} "pw groupmod plex -m media"
 #   iocage exec ${JAIL_NAME} sed -i '' "s/plexmediaserver_user=\"plex\"/plexmediaserver_user=\"media\"/" /usr/local/etc/rc.d/plexmediaserver
 #   iocage exec ${JAIL_NAME} sed -i '' "s/plexmediaserver_group=\"plex\"/plexmediaserver_group=\"media\"/" /usr/local/etc/rc.d//plexmediaserver
-   iocage exec ${JAIL_NAME} chown -R media:media /config
+   iocage exec ${JAIL_NAME} chown -R media:media /config /var/run/plex
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_user="media"
    iocage exec ${JAIL_NAME} sysrc plexmediaserver_group="media"
    iocage exec ${JAIL_NAME} service plexmediaserver start
+   iocage exec "${JAIL_NAME}" cp -f /mnt/configs/update_packages /tmp/update_packages
+   iocage exec "${JAIL_NAME}" sed -i '' "s/_plexpass//" /tmp/update_packages
+
+
    sed -i '' "s/_plexpass//" "${CONFIGS_PATH}"/update_packages
 fi
 
-
 #
 # update packages & remove /mnt/configs as no longer needed
-iocage exec "${JAIL_NAME}" crontab /mnt/configs/update_packages
-iocage fstab -r ${JAIL_NAME} ${CONFIGS_PATH} /mnt/configs nullfs rw 0 0
-iocage exec "${JAIL_NAME}" rm -rf /mnt/configs
+iocage exec "${JAIL_NAME}" crontab /tmp/update_packages
+iocage fstab -r "${JAIL_NAME}" "${CONFIGS_PATH}" /mnt/configs nullfs rw 0 0
+iocage exec "${JAIL_NAME}" rm -rf /mnt/configs /tmp/update_packages
 iocage restart "${JAIL_NAME}"
 echo "${PLEX_TYPE} installed"
 echo
